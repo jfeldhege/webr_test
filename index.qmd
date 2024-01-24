@@ -1,0 +1,38 @@
+---
+title: "WebR Quarto Test"
+author: "Johannes Feldhege"
+
+format: html
+engine: knitr
+
+webr:
+  packages: ['ggplot2', 'dplyr']
+  channel-type: "post-message"
+
+filters:
+  - webr
+---
+
+## WebR Code Cell
+
+```{webr-r}
+fit = lm(mpg ~ am, data = mtcars)
+
+summary(fit)
+```
+
+## A code cell containing a plot
+
+```{webr-r}
+plot(as.factor(mtcars$cyl), mtcars$mpg)
+
+```
+
+## A code cell with a ggplot
+
+```{webr-r}
+library(ggplot2)
+
+ggplot(mtcars, aes(cyl, mpg)) + geom_point()
+
+```
