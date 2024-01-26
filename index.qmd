@@ -1,5 +1,5 @@
 ---
-title: "WebR Quarto Test"
+title: "Testing webR functionality in Quarto documents"
 author: "Johannes Feldhege"
 
 format: html
@@ -14,25 +14,33 @@ filters:
 ---
 
 ## WebR Code Cell
-
+Editing the content of webR code cells and clicking Run Code changes the output. 
 ```{webr-r}
 fit = lm(mpg ~ am, data = mtcars)
 
 summary(fit)
 ```
 
-## A code cell containing a plot
+## Plots
+With webR, code output is not limited to text but can also include plots. 
 
 ```{webr-r}
 plot(as.factor(mtcars$cyl), mtcars$mpg)
 
 ```
 
-## A code cell with a ggplot
+## Non-base packages
 
+You can install cran packages by including them in the yaml definition or by calling `webr::install()`. For this page I have already installed the `dplyr` and `ggplot2` packages.
+Ìnstalled packages can be loaded with `library()`.
 ```{webr-r}
 library(ggplot2)
+library(dplyr)
 
-ggplot(mtcars, aes(cyl, mpg)) + geom_point()
+mtcars %>% 
+  add_rownames("make") %>% 
+  ggplot(aes(x = wt, y = mpg, label = make)) + 
+  geom_point() +
+  geom_text(hjust = 0, nudge_x = 0.05, check_overlap = TRUE)
 
 ```
