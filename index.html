@@ -2,13 +2,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.527">
+<meta name="generator" content="quarto-1.4.549">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Johannes Feldhege">
 
-<title>WebR Quarto Test</title>
+<title>Testing webR functionality in Quarto documents</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -184,7 +184,7 @@ globalThis.qwebrCustomizedWebROptions = {
 };
 
 // Store cell data
-globalThis.qwebrCellDetails = [{"id":1,"options":{"context":"interactive"},"code":"fit = lm(mpg ~ am, data = mtcars)\n\nsummary(fit)"},{"id":2,"options":{"context":"interactive"},"code":"plot(as.factor(mtcars$cyl), mtcars$mpg)"},{"id":3,"options":{"context":"interactive"},"code":"library(ggplot2)\n\nggplot(mtcars, aes(cyl, mpg)) + geom_point()"}];
+globalThis.qwebrCellDetails = [{"id":1,"options":{"context":"interactive"},"code":"fit = lm(mpg ~ am, data = mtcars)\n\nsummary(fit)"},{"id":2,"options":{"context":"interactive"},"code":"plot(as.factor(mtcars$cyl), mtcars$mpg)"},{"id":3,"options":{"context":"interactive"},"code":"library(ggplot2)\nlibrary(dplyr)\n\nmtcars %>% \n  add_rownames(\"make\") %>% \n  ggplot(aes(x = wt, y = mpg, label = make)) + \n  geom_point() +\n  geom_text(hjust = 0, nudge_x = 0.05, check_overlap = TRUE)"}];
 
 </script>
 <script type="module">
@@ -942,7 +942,7 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">WebR Quarto Test</h1>
+<h1 class="title">Testing webR functionality in Quarto documents</h1>
 </div>
 
 
@@ -967,16 +967,19 @@ globalThis.qwebrCreateMonacoEditorInstance = function (cellData) {
 
 <section id="webr-code-cell" class="level2">
 <h2 class="anchored" data-anchor-id="webr-code-cell">WebR Code Cell</h2>
+<p>Editing the content of webR code cells and clicking Run Code changes the output.</p>
 <div id="qwebr-insertion-location-1"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="a-code-cell-containing-a-plot" class="level2">
-<h2 class="anchored" data-anchor-id="a-code-cell-containing-a-plot">A code cell containing a plot</h2>
+<section id="plots" class="level2">
+<h2 class="anchored" data-anchor-id="plots">Plots</h2>
+<p>With webR, code output is not limited to text but can also include plots.</p>
 <div id="qwebr-insertion-location-2"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
-<section id="a-code-cell-with-a-ggplot" class="level2">
-<h2 class="anchored" data-anchor-id="a-code-cell-with-a-ggplot">A code cell with a ggplot</h2>
+<section id="non-base-packages" class="level2">
+<h2 class="anchored" data-anchor-id="non-base-packages">Non-base packages</h2>
+<p>You can install cran packages by including them in the yaml definition or by calling <code>webr::install()</code>. For this page I have already installed the <code>dplyr</code> and <code>ggplot2</code> packages. Ìnstalled packages can be loaded with <code>library()</code>.</p>
 <div id="qwebr-insertion-location-3"></div>
 <noscript>Please enable JavaScript to experience the dynamic code cell content on this page.</noscript>
 </section>
@@ -1144,7 +1147,12 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      return note.innerHTML;
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
     }
   }
   for (var i=0; i<xrefs.length; i++) {
